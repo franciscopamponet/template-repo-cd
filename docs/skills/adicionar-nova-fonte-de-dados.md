@@ -1,7 +1,7 @@
 # Skill — Adicionar uma nova fonte de dados
 
 Como implementar um novo `DataSource` sem tocar no núcleo (Decisão 3 / Rule 06).
-Referência viva: `data/sources/parquet_source.py` (a mais simples).
+Referência viva: `pipeline/data/sources/parquet_source.py` (a mais simples).
 
 ## O contrato
 Uma fonte é qualquer classe com dois métodos (é um `Protocol`, não precisa herdar nada):
@@ -11,12 +11,12 @@ def read(self, **options) -> pd.DataFrame: ...
 def write(self, df: pd.DataFrame, **options) -> None: ...
 ```
 
-Definido em `common/data_source.py`. O pipeline chama `source.read()` e nunca sabe qual
+Definido em `pipeline/common/data_source.py`. O pipeline chama `source.read()` e nunca sabe qual
 implementação está por trás.
 
 ## Passos
 
-1. **Crie `data/sources/<nome>_source.py`** com a classe. Leia toda configuração de
+1. **Crie `pipeline/data/sources/<nome>_source.py`** com a classe. Leia toda configuração de
    `config` via `getattr` — nada de caminho/credencial no código (Rule 07):
    ```python
    class MinhaFonte:
@@ -38,14 +38,14 @@ implementação está por trás.
    permite o repo importar sem a dependência instalada (Rule 06). Veja
    `SparkTableSource`/`SQLSource` como modelo.
 
-3. **Registre o tipo na factory** `build_data_source` em `common/data_source.py`:
+3. **Registre o tipo na factory** `build_data_source` em `pipeline/common/data_source.py`:
    ```python
    if source_type == "minha_fonte":
        from data.sources.minha_fonte_source import MinhaFonte
        return MinhaFonte(config)
    ```
 
-4. **Adicione o tipo ao schema** `DataSourceConfig.type` em `common/config.py`:
+4. **Adicione o tipo ao schema** `DataSourceConfig.type` em `pipeline/common/config.py`:
    ```python
    type: Literal["parquet", "spark_table", "sql", "minha_fonte"] = "parquet"
    ```

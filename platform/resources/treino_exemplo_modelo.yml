@@ -1,11 +1,11 @@
 # =============================================================================
 # Job de treino do exemplo_modelo — casca OPCIONAL (toggle = Sim).
 #
-# Aponta para o ENTRYPOINT (entrypoints/run_serverless.py), nunca direto para o
+# Aponta para o ENTRYPOINT (pipeline/entrypoints/run_serverless.py), nunca direto para o
 # núcleo. O job passa apenas o caminho do config: toda a parametrização vive no
 # YAML de config, não aqui (Rule 07).
 #
-# Convenção de nome (Rule 05): config/<modelo>.yaml ↔ models/<modelo>/
+# Convenção de nome (Rule 05): pipeline/config/<modelo>.yaml ↔ pipeline/models/<modelo>/
 # PREENCHER NA CÓPIA: os valores marcados com <PREENCHER: ...>.
 # =============================================================================
 
@@ -28,10 +28,10 @@ resources:
         - task_key: treino
           environment_key: padrao
           spark_python_task:
-            python_file: ../../entrypoints/run_serverless.py
+            python_file: ../../pipeline/entrypoints/run_serverless.py
             parameters:
               - "--config"
-              - "config/exemplo_modelo.yaml"
+              - "pipeline/config/exemplo_modelo.yaml"
 
       # Notificações de falha do job.
       email_notifications:

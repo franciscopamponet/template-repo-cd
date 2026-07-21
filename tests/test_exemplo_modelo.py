@@ -19,7 +19,7 @@ from models.exemplo_modelo.orchestrator import run
 from models.exemplo_modelo.prepare_data import prepare_data
 from models.exemplo_modelo.train import train
 
-MODELO_DIR = Path("models/exemplo_modelo")
+MODELO_DIR = Path("pipeline/models/exemplo_modelo")
 ANATOMIA = {
     "prepare_data.py",
     "build_model.py",

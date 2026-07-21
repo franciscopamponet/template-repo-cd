@@ -30,8 +30,8 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
-# O núcleo: o que precisa sobreviver à poda de platform/.
-NUCLEO = ["models", "common", "config", "data", "entrypoints"]
+# O núcleo: o que precisa sobreviver à poda de platform/. Mora todo sob pipeline/.
+NUCLEO = ["pipeline"]
 
 PROIBIDO = "platform"
 

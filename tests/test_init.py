@@ -29,13 +29,24 @@ IGNORAR = shutil.ignore_patterns(
     "mlruns",
     "mlartifacts",
     "dist",
-    "data",
+    # Dados gerados (não o código em pipeline/data/sources, que precisa vir na cópia).
+    "raw",
+    "processed",
+    "interim",
+    "external",
+    "*.parquet",
 )
 
 
 def _rodar(cmd: list[str], cwd: Path) -> subprocess.CompletedProcess:
-    """Roda um comando na cópia, com o PYTHONPATH ancorado nela."""
-    env = {**os.environ, "PYTHONPATH": str(cwd)}
+    """Roda um comando na cópia, com o PYTHONPATH ancorado nela.
+
+    O núcleo mora sob pipeline/ (src-layout), então é ele que entra no path para os
+    imports de primeiro nível (from common..., from models...); a raiz entra para o
+    `import tools`.
+    """
+    pythonpath = os.pathsep.join([str(cwd / "pipeline"), str(cwd)])
+    env = {**os.environ, "PYTHONPATH": pythonpath}
     return subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True)
 
 
@@ -75,10 +86,10 @@ def _init(copia: Path, *, databricks: str, nome="Previsão de Churn", modelo="ch
 def test_init_renomeia_modelo_e_config(copia_do_esqueleto, databricks):
     _init(copia_do_esqueleto, databricks=databricks)
 
-    assert not (copia_do_esqueleto / "models" / "exemplo_modelo").exists()
-    assert not (copia_do_esqueleto / "config" / "exemplo_modelo.yaml").exists()
+    assert not (copia_do_esqueleto / "pipeline" / "models" / "exemplo_modelo").exists()
+    assert not (copia_do_esqueleto / "pipeline" / "config" / "exemplo_modelo.yaml").exists()
 
-    modelo = copia_do_esqueleto / "models" / "churn"
+    modelo = copia_do_esqueleto / "pipeline" / "models" / "churn"
     assert modelo.is_dir()
     # Rule 00: a anatomia sobrevive ao rename.
     assert {p.name for p in modelo.iterdir() if p.is_file()} == {
@@ -88,20 +99,22 @@ def test_init_renomeia_modelo_e_config(copia_do_esqueleto, databricks):
         "evaluate_model.py",
         "orchestrator.py",
     }
-    assert (copia_do_esqueleto / "config" / "churn.yaml").exists()
+    assert (copia_do_esqueleto / "pipeline" / "config" / "churn.yaml").exists()
 
 
 @pytest.mark.parametrize("databricks", ["yes", "no"])
 def test_init_atualiza_referencias_ao_modelo(copia_do_esqueleto, databricks):
     _init(copia_do_esqueleto, databricks=databricks)
 
-    entrypoint = (copia_do_esqueleto / "entrypoints" / "run_local.py").read_text(encoding="utf-8")
+    entrypoint = (copia_do_esqueleto / "pipeline" / "entrypoints" / "run_local.py").read_text(
+        encoding="utf-8"
+    )
     assert "models.churn.orchestrator" in entrypoint
     assert "exemplo_modelo" not in entrypoint
 
-    orchestrator = (copia_do_esqueleto / "models" / "churn" / "orchestrator.py").read_text(
-        encoding="utf-8"
-    )
+    orchestrator = (
+        copia_do_esqueleto / "pipeline" / "models" / "churn" / "orchestrator.py"
+    ).read_text(encoding="utf-8")
     assert "exemplo_modelo" not in orchestrator
 
 
@@ -189,8 +202,8 @@ def test_init_rejeita_segunda_execucao(copia_do_esqueleto):
     assert segunda.returncode == 1
     assert "já ter sido inicializado" in segunda.stdout
     # E o projeto continua íntegro: o modelo do primeiro init segue lá.
-    assert (copia_do_esqueleto / "models" / "churn").is_dir()
-    assert not (copia_do_esqueleto / "models" / "outro").exists()
+    assert (copia_do_esqueleto / "pipeline" / "models" / "churn").is_dir()
+    assert not (copia_do_esqueleto / "pipeline" / "models" / "outro").exists()
 
 
 def _git(cmd: list[str], cwd: Path) -> subprocess.CompletedProcess:
@@ -229,7 +242,7 @@ def test_init_aborta_com_arvore_git_suja(copia_do_esqueleto):
     assert resultado.returncode == 1
     assert "não commitadas" in resultado.stdout
     # Nada foi mutilado: o modelo de exemplo continua intacto.
-    assert (copia / "models" / "exemplo_modelo").is_dir()
+    assert (copia / "pipeline" / "models" / "exemplo_modelo").is_dir()
 
     # Com a árvore limpa de novo, o init roda normalmente.
     assert _git(["add", "-A"], cwd=copia).returncode == 0
@@ -260,14 +273,14 @@ def test_sem_databricks_poda_a_plataforma(copia_do_esqueleto):
     _init(copia_do_esqueleto, databricks="no")
 
     assert not (copia_do_esqueleto / "platform").exists()
-    assert not (copia_do_esqueleto / "entrypoints" / "run_serverless.py").exists()
+    assert not (copia_do_esqueleto / "pipeline" / "entrypoints" / "run_serverless.py").exists()
     assert not (copia_do_esqueleto / "tools" / "gen_conda.py").exists()
     assert not (copia_do_esqueleto / "tests" / "test_gen_conda.py").exists()
 
     # O núcleo NÃO é tocado (invariante central).
-    assert (copia_do_esqueleto / "entrypoints" / "run_local.py").exists()
-    assert (copia_do_esqueleto / "common" / "tracking.py").exists()
-    assert (copia_do_esqueleto / "models" / "churn").is_dir()
+    assert (copia_do_esqueleto / "pipeline" / "entrypoints" / "run_local.py").exists()
+    assert (copia_do_esqueleto / "pipeline" / "common" / "tracking.py").exists()
+    assert (copia_do_esqueleto / "pipeline" / "models" / "churn").is_dir()
 
 
 def test_sem_databricks_remove_o_extra_do_pyproject(copia_do_esqueleto):
@@ -283,7 +296,7 @@ def test_sem_databricks_remove_o_extra_do_pyproject(copia_do_esqueleto):
 def test_sem_databricks_config_fica_local(copia_do_esqueleto):
     _init(copia_do_esqueleto, databricks="no")
 
-    config = (copia_do_esqueleto / "config" / "churn.yaml").read_text(encoding="utf-8")
+    config = (copia_do_esqueleto / "pipeline" / "config" / "churn.yaml").read_text(encoding="utf-8")
     assert "databricks: false" in config
     assert "sqlite:///" in config
 
@@ -303,9 +316,9 @@ def test_sem_databricks_o_pipeline_roda_ponta_a_ponta(copia_do_esqueleto):
             "rng = np.random.default_rng(0); n = 300;"
             "x1, x2, x3 = rng.normal(size=n), rng.normal(size=n), rng.normal(size=n);"
             "y = ((x1 + x2) > 0).astype(int);"
-            "pathlib.Path('data/raw').mkdir(parents=True, exist_ok=True);"
+            "pathlib.Path('pipeline/data/raw').mkdir(parents=True, exist_ok=True);"
             "pd.DataFrame({'x1': x1, 'x2': x2, 'x3': x3, 'y': y})"
-            ".to_parquet('data/raw/exemplo.parquet', index=False)",
+            ".to_parquet('pipeline/data/raw/exemplo.parquet', index=False)",
         ],
         cwd=copia,
     )
@@ -320,7 +333,12 @@ def test_sem_databricks_o_pipeline_roda_ponta_a_ponta(copia_do_esqueleto):
     assert str(copia) in procedencia.stdout, "importou do repo original, não da cópia"
 
     resultado = _rodar(
-        [sys.executable, "entrypoints/run_local.py", "--config", "config/churn.yaml"],
+        [
+            sys.executable,
+            "pipeline/entrypoints/run_local.py",
+            "--config",
+            "pipeline/config/churn.yaml",
+        ],
         cwd=copia,
     )
     assert resultado.returncode == 0, f"pipeline falhou:\n{resultado.stdout}\n{resultado.stderr}"
@@ -338,7 +356,7 @@ def test_com_databricks_mantem_a_plataforma(copia_do_esqueleto):
 
     assert (copia_do_esqueleto / "platform" / "databricks.yml").exists()
     assert (copia_do_esqueleto / "platform" / "MLProject").exists()
-    assert (copia_do_esqueleto / "entrypoints" / "run_serverless.py").exists()
+    assert (copia_do_esqueleto / "pipeline" / "entrypoints" / "run_serverless.py").exists()
     assert (copia_do_esqueleto / "tools" / "gen_conda.py").exists()
 
     pyproject = (copia_do_esqueleto / "pyproject.toml").read_text(encoding="utf-8")
@@ -360,7 +378,7 @@ def test_com_databricks_rege_o_conda_em_sync(copia_do_esqueleto):
 def test_com_databricks_config_e_bundle(copia_do_esqueleto):
     _init(copia_do_esqueleto, databricks="yes")
 
-    config = (copia_do_esqueleto / "config" / "churn.yaml").read_text(encoding="utf-8")
+    config = (copia_do_esqueleto / "pipeline" / "config" / "churn.yaml").read_text(encoding="utf-8")
     assert "databricks: true" in config
     assert "/Shared/previsao-de-churn" in config
 

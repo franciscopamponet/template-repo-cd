@@ -13,11 +13,11 @@ Uso não-interativo (CI/testes):
     python3 tools/init.py --name "Previsão de Churn" --databricks no --model churn --yes
 
 O que faz:
-  1. Renomeia `models/exemplo_modelo/` e `config/exemplo_modelo.yaml` para o nome do
-     primeiro modelo, atualizando todas as referências.
+  1. Renomeia `pipeline/models/exemplo_modelo/` e `pipeline/config/exemplo_modelo.yaml`
+     para o nome do primeiro modelo, atualizando todas as referências.
   2. Substitui os placeholders de nome do projeto (README, pyproject, MLProject).
   3. Aplica o TOGGLE (Decisão 1):
-       - Databricks NÃO → remove `platform/`, `entrypoints/run_serverless.py`, o extra
+       - Databricks NÃO → remove `platform/`, `pipeline/entrypoints/run_serverless.py`, o extra
          `databricks` do pyproject e as ferramentas/testes que só existem para a
          plataforma. O núcleo NÃO é tocado (invariante central).
        - Databricks SIM → mantém tudo e regenera o `conda.yaml` (Rule 03), deixando os
@@ -57,13 +57,19 @@ PLACEHOLDER_TITULO = "<!-- PREENCHER: nome do projeto -->"
 # Onde o token do modelo pode aparecer. Restrito de propósito: a documentação do molde
 # (docs/) e o contexto do projeto (.claude/) falam do esqueleto em geral, com o
 # exemplo_modelo como referência canônica, e NÃO devem ser reescritos pelo rename.
-PASTAS_COM_MODELO = ["entrypoints", "models", "config", "tests", "platform"]
+PASTAS_COM_MODELO = [
+    "pipeline/entrypoints",
+    "pipeline/models",
+    "pipeline/config",
+    "tests",
+    "platform",
+]
 EXTENSOES_TEXTO = {".py", ".yaml", ".yml", ".toml", ".md", ""}
 
 # Arquivos que só existem por causa da plataforma (removidos se toggle = Não).
 ARTEFATOS_DE_PLATAFORMA = [
     "platform",
-    "entrypoints/run_serverless.py",
+    "pipeline/entrypoints/run_serverless.py",
     "tools/gen_conda.py",
     "tests/test_gen_conda.py",
 ]
@@ -120,8 +126,8 @@ def ja_inicializado() -> str | None:
         encoding="utf-8"
     ):
         return "o pyproject.toml já não tem o nome do esqueleto"
-    if not (RAIZ / "models" / MODELO_ORIGINAL).exists():
-        return f"models/{MODELO_ORIGINAL}/ já não existe"
+    if not (RAIZ / "pipeline" / "models" / MODELO_ORIGINAL).exists():
+        return f"pipeline/models/{MODELO_ORIGINAL}/ já não existe"
     return None
 
 
@@ -370,7 +376,7 @@ def main(argv: list[str] | None = None) -> int:
         feitos += remover_extra_databricks()
 
     feitos += ajustar_config_tracking(
-        RAIZ / "config" / f"{modelo_snake}.yaml", usa_databricks, slug
+        RAIZ / "pipeline" / "config" / f"{modelo_snake}.yaml", usa_databricks, slug
     )
 
     # Autodestruição: ver justificativa na docstring do módulo.
@@ -398,9 +404,12 @@ def main(argv: list[str] | None = None) -> int:
     print("-" * 70)
     print("Próximos passos:")
     print("  1. uv sync")
-    print(f"  2. edite config/{modelo_snake}.yaml (fonte de dados, params) — Rule 07")
+    print(f"  2. edite pipeline/config/{modelo_snake}.yaml (fonte de dados, params) — Rule 07")
     print("  3. uv run pytest")
-    print(f"  4. uv run python entrypoints/run_local.py --config config/{modelo_snake}.yaml")
+    print(
+        f"  4. uv run python pipeline/entrypoints/run_local.py "
+        f"--config pipeline/config/{modelo_snake}.yaml"
+    )
     if usa_databricks:
         print("  5. preencha os <PREENCHER: ...> em platform/databricks.yml e resources/")
         print("     e valide com: databricks bundle validate -t dev")

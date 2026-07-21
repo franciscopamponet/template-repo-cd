@@ -1,22 +1,22 @@
-# Guia — data/
+# Guia — pipeline/data/
 
 ## Propósito
 Abrigar as **implementações concretas** da interface de dados neutra `DataSource`
-(definida em `common/`). É a camada que sabe DE ONDE o dado vem; o resto do pipeline não.
+(definida em `pipeline/common/`). É a camada que sabe DE ONDE o dado vem; o resto do pipeline não.
 
 ## Pode morar aqui
-- `data/sources/` com implementações concretas: `ParquetSource`, `SparkTableSource`,
+- `pipeline/data/sources/` com implementações concretas: `ParquetSource`, `SparkTableSource`,
   `SQLSource`, etc., cada uma cumprindo o `Protocol` `DataSource`.
 - Adaptadores de leitura/escrita específicos de uma origem.
 
 ## Não pode morar aqui
-- A definição do `Protocol` `DataSource` (isso mora em `common/`).
-- Lógica de modelo (isso é `models/`).
+- A definição do `Protocol` `DataSource` (isso mora em `pipeline/common/`).
+- Lógica de modelo (isso é `pipeline/models/`).
 - Caminhos/tabelas hardcoded — eles vêm do config (Rule 07).
 
 ## Como funciona de verdade
 
-O contrato está em [`common/data_source.py`](../../common/data_source.py):
+O contrato está em [`pipeline/common/data_source.py`](../../pipeline/common/data_source.py):
 
 ```python
 @runtime_checkable
@@ -30,7 +30,7 @@ devolve a implementação certa conforme `config.type`. Os imports concretos sã
 (feitos dentro da factory / dos métodos), para o repo importar sem pyspark/sqlalchemy
 instalados — Rule 06.
 
-Implementações que já existem em [`data/sources/`](../../data/sources/):
+Implementações que já existem em [`pipeline/data/sources/`](../../pipeline/data/sources/):
 
 | `type`         | classe             | dependência       | precisa de config |
 | -------------- | ------------------ | ----------------- | ----------------- |
@@ -45,11 +45,11 @@ Implementações que já existem em [`data/sources/`](../../data/sources/):
 Ver a skill [`adicionar-nova-fonte-de-dados.md`](../skills/adicionar-nova-fonte-de-dados.md)
 para o passo a passo completo. Em resumo:
 
-1. Crie `data/sources/<nome>_source.py` com uma classe que implemente `read`/`write`
+1. Crie `pipeline/data/sources/<nome>_source.py` com uma classe que implemente `read`/`write`
    (não precisa herdar de nada — é um `Protocol`; basta ter os métodos).
 2. Imports pesados **lazy**, dentro dos métodos (Rule 06).
 3. Registre o novo `type` na factory `build_data_source` (um `if` + import lazy) e no
-   `Literal` de `DataSourceConfig.type` em `common/config.py`.
+   `Literal` de `DataSourceConfig.type` em `pipeline/common/config.py`.
 4. Nada de caminho/credencial no código: tudo vem de `getattr(config, ...)` (Rule 07).
 
 O núcleo (`prepare_data`, `orchestrator`) **não muda** — é esse o ponto da interface neutra.

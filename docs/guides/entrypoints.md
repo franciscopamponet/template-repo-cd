@@ -1,4 +1,4 @@
-# Guia — entrypoints/
+# Guia — pipeline/entrypoints/
 
 ## Propósito
 Abrigar os **launchers finos** que disparam o pipeline. São casca de entrada: leem o
@@ -10,7 +10,7 @@ config, escolhem o modelo e chamam o `orchestrator.py`. O modo (local vs. server
 - Parsing de argumentos de linha de comando que apenas repassa ao núcleo.
 
 ## Não pode morar aqui
-- Lógica de pipeline (prepare/build/train/evaluate) — isso é `models/`.
+- Lógica de pipeline (prepare/build/train/evaluate) — isso é `pipeline/models/`.
 - Regra de negócio ou tracking direto de MLflow (Rule 01).
 - Dependência que quebre com `platform/` inexistente quando o toggle for Não (Rule 06).
 
@@ -18,8 +18,8 @@ config, escolhem o modelo e chamam o `orchestrator.py`. O modo (local vs. server
 
 | arquivo | modo | quando existe |
 | ------- | ---- | ------------- |
-| [`run_local.py`](../../entrypoints/run_local.py)         | execução local        | sempre |
-| [`run_serverless.py`](../../entrypoints/run_serverless.py) | plataforma/Databricks | só se toggle = Sim (o `init.py` poda se Não) |
+| [`run_local.py`](../../pipeline/entrypoints/run_local.py)         | execução local        | sempre |
+| [`run_serverless.py`](../../pipeline/entrypoints/run_serverless.py) | plataforma/Databricks | só se toggle = Sim (o `init.py` poda se Não) |
 
 Os dois são **idênticos em estrutura**: parseiam `--config` e chamam
 `models.<modelo>.orchestrator.run(config)`. A diferença de plataforma **não** está aqui
@@ -37,18 +37,18 @@ print(f"métricas: {resultado['metrics']}")
 
 ```bash
 # local (toggle = Não, ou local mesmo com Databricks configurado):
-uv run python entrypoints/run_local.py --config config/<modelo>.yaml
+uv run python pipeline/entrypoints/run_local.py --config pipeline/config/<modelo>.yaml
 
 # na plataforma (toggle = Sim), o job aponta para:
-python entrypoints/run_serverless.py --config config/<modelo>.yaml
+python pipeline/entrypoints/run_serverless.py --config pipeline/config/<modelo>.yaml
 ```
 
 Validado ponta a ponta nos dois toggles: ambos treinam, avaliam e logam via
-`common/tracking.py`, produzindo `run_id` + métricas.
+`pipeline/common/tracking.py`, produzindo `run_id` + métricas.
 
 ## Como eu adiciono/ajusto um entrypoint
 
 Raramente é preciso. Se um novo modo de execução surgir, mantenha o launcher **fino**:
-só parsing + chamada ao `orchestrator`. Qualquer lógica real vai para `models/` ou
-`common/`. O `import` do orchestrator do modelo é atualizado pelo `init.py` no rename,
+só parsing + chamada ao `orchestrator`. Qualquer lógica real vai para `pipeline/models/` ou
+`pipeline/common/`. O `import` do orchestrator do modelo é atualizado pelo `init.py` no rename,
 ou à mão ao trocar de modelo.

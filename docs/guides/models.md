@@ -1,7 +1,7 @@
-# Guia — models/
+# Guia — pipeline/models/
 
 ## Propósito
-Abrigar cada modelo em `models/<nome>/`, seguindo a **anatomia de 5 arquivos**
+Abrigar cada modelo em `pipeline/models/<nome>/`, seguindo a **anatomia de 5 arquivos**
 (Rule 00). É o coração do núcleo do pipeline.
 
 ## Pode morar aqui
@@ -12,13 +12,13 @@ Abrigar cada modelo em `models/<nome>/`, seguindo a **anatomia de 5 arquivos**
 
 ## Não pode morar aqui
 - Um 6º arquivo, renomeações ou fusões dos 5 (Rule 00).
-- `import mlflow` fora do fluxo `orchestrator.py` → `common/tracking.py` (Rule 01).
-- Lógica compartilhada entre modelos (isso é `common/`).
+- `import mlflow` fora do fluxo `orchestrator.py` → `pipeline/common/tracking.py` (Rule 01).
+- Lógica compartilhada entre modelos (isso é `pipeline/common/`).
 - Caminhos/hiperparâmetros hardcoded (Rule 07).
 
 ## O contrato entre os 5 arquivos
 
-Referência real: [`models/exemplo_modelo/`](../../models/exemplo_modelo/). Cada arquivo
+Referência real: [`pipeline/models/exemplo_modelo/`](../../pipeline/models/exemplo_modelo/). Cada arquivo
 tem um papel e um contrato de entrada/saída fixo:
 
 | # | arquivo             | recebe                         | devolve                     | pode falar com MLflow? |
@@ -32,7 +32,7 @@ tem um papel e um contrato de entrada/saída fixo:
 `PreparedData` (definido em `prepare_data.py`) carrega `x_train, x_test, y_train,
 y_test, feature_names`. Os 4 primeiros arquivos são puros: sem I/O de tracking, sem
 `import mlflow`. O `orchestrator` é a espinha dorsal — ele carrega o config, constrói a
-fonte de dados, chama os 4 na ordem e loga tudo via `common/tracking.py` (Rule 01):
+fonte de dados, chama os 4 na ordem e loga tudo via `pipeline/common/tracking.py` (Rule 01):
 
 ```python
 config = load_config(config_path)
@@ -51,8 +51,8 @@ with tracker.start_run(run_name=config.name):
 ## Como eu adiciono um novo modelo
 
 Ver a skill [`adicionar-novo-modelo.md`](../skills/adicionar-novo-modelo.md) para o
-passo a passo. Em resumo: copie `models/exemplo_modelo/` para `models/<novo>/`, crie
-`config/<novo>.yaml` com o mesmo nome (Rule 05), atualize os imports internos (o
+passo a passo. Em resumo: copie `pipeline/models/exemplo_modelo/` para `pipeline/models/<novo>/`, crie
+`pipeline/config/<novo>.yaml` com o mesmo nome (Rule 05), atualize os imports internos (o
 `orchestrator` importa `models.<novo>.prepare_data` etc.) e mantenha os 5 arquivos —
-nem mais, nem menos. Lógica que serviria a vários modelos vai para `common/`, não para
+nem mais, nem menos. Lógica que serviria a vários modelos vai para `pipeline/common/`, não para
 um 6º arquivo.

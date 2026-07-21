@@ -36,10 +36,10 @@ mlflow.db
 mlflow.db-journal
 
 # --- Dados ---
-data/raw/
-data/interim/
-data/processed/
-data/external/
+pipeline/data/raw/
+pipeline/data/interim/
+pipeline/data/processed/
+pipeline/data/external/
 *.parquet
 *.csv
 *.feather

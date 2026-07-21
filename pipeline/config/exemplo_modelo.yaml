@@ -18,7 +18,7 @@ name: exemplo_modelo
 # ---------------------------------------------------------------------------
 data_source:
   type: parquet          # parquet (default local) | spark_table | sql
-  path: data/raw/exemplo.parquet
+  path: pipeline/data/raw/exemplo.parquet
 
   # --- Alternativa: tabela Spark (requer o extra 'spark'/'databricks') ---
   # type: spark_table
@@ -45,7 +45,7 @@ tracking:
   # registry_uri: null
 
 # Caminho de saída dos artefatos processados.
-output_dir: data/processed
+output_dir: pipeline/data/processed
 
 # ---------------------------------------------------------------------------
 # Hiperparâmetros do modelo. Chaves livres; consumidas por build_model/train.

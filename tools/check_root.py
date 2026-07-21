@@ -33,12 +33,8 @@ ARQUIVOS_PERMITIDOS = {
 PASTAS_PERMITIDAS = {
     ".github": "o GitHub Actions só executa a partir daqui",
     ".claude": "contexto DESTE projeto, preenchido ao longo do tempo (decisão 8)",
-    "common": "lógica compartilhada entre modelos",
-    "config": "config por modelo (pipeline config-driven)",
-    "data": "implementações concretas da interface de dados",
+    "pipeline": "onde o analista trabalha: common, config, data, entrypoints, models (decisão 9)",
     "docs": "documentação do MOLDE: context, rules, guides, skills, decisões",
-    "entrypoints": "launchers finos",
-    "models": "modelos, na anatomia de 5 arquivos",
     "platform": "casca opcional de plataforma (podada se toggle = Não)",
     "tests": "testes",
     "tools": "scripts de scaffolding e verificação",
@@ -47,12 +43,12 @@ PASTAS_PERMITIDAS = {
 # Para onde mandar o intruso, conforme o tipo.
 SUGESTOES = {
     ".md": "docs/ se for sobre o molde; .claude/context/ se for contexto deste projeto",
-    ".py": "tools/ se for script; common/ se for lógica compartilhada",
-    ".yaml": "config/ se for config de modelo; platform/ se for de plataforma",
-    ".yml": "config/ se for config de modelo; platform/ se for de plataforma",
+    ".py": "tools/ se for script; pipeline/common/ se for lógica compartilhada",
+    ".yaml": "pipeline/config/ se for config de modelo; platform/ se for de plataforma",
+    ".yml": "pipeline/config/ se for config de modelo; platform/ se for de plataforma",
     ".txt": "docs/ — e se for requirements, ele NÃO existe aqui (Rule 02)",
     ".sh": "tools/",
-    ".ipynb": "não versione notebooks soltos; use models/<nome>/ ou docs/",
+    ".ipynb": "não versione notebooks soltos; use pipeline/models/<nome>/ ou docs/",
 }
 
 

@@ -1,4 +1,4 @@
-# Guia — common/
+# Guia — pipeline/common/
 
 ## Propósito
 Abrigar a lógica compartilhada entre modelos: contratos, tracking e splits. É onde mora
@@ -10,18 +10,18 @@ o que todos os modelos reutilizam.
 - Utilidades de split, contratos e helpers usados por mais de um modelo.
 
 ## Não pode morar aqui
-- Lógica específica de um único modelo (isso é `models/<nome>/`).
-- Implementações concretas de fonte de dados (isso é `data/sources/`).
+- Lógica específica de um único modelo (isso é `pipeline/models/<nome>/`).
+- Implementações concretas de fonte de dados (isso é `pipeline/data/sources/`).
 - Import de `platform/` (Rule 06).
 
 ## O que já mora aqui
 
 | arquivo             | o que expõe |
 | ------------------- | ----------- |
-| [`config.py`](../../common/config.py)         | `BaseModelConfig`, `DataSourceConfig`, `TrackingConfig`, `load_config()` |
-| [`data_source.py`](../../common/data_source.py) | `Protocol DataSource` (contrato) + `build_data_source()` (factory) |
-| [`tracking.py`](../../common/tracking.py)       | `Tracker` — o **único** wrapper de MLflow do repo (Rule 01) |
-| [`splits.py`](../../common/splits.py)           | `random_split()`, `temporal_split()` |
+| [`config.py`](../../pipeline/common/config.py)         | `BaseModelConfig`, `DataSourceConfig`, `TrackingConfig`, `load_config()` |
+| [`data_source.py`](../../pipeline/common/data_source.py) | `Protocol DataSource` (contrato) + `build_data_source()` (factory) |
+| [`tracking.py`](../../pipeline/common/tracking.py)       | `Tracker` — o **único** wrapper de MLflow do repo (Rule 01) |
+| [`splits.py`](../../pipeline/common/splits.py)           | `random_split()`, `temporal_split()` |
 
 ### `Tracker` (o ponto único de MLflow)
 `import mlflow` acontece **só** aqui (Rule 01 — verificado por `tools/check_mlflow.py`).
@@ -40,8 +40,8 @@ A mecânica mora aqui; os parâmetros vêm do config (Rule 07).
 ## Como eu adiciono um utilitário compartilhado
 
 1. Confirme que serve a **mais de um modelo**. Se é de um só, o lugar é
-   `models/<nome>/`, não aqui.
-2. Crie/edite o módulo em `common/` (ex.: `common/features.py` para encoders reusáveis).
+   `pipeline/models/<nome>/`, não aqui.
+2. Crie/edite o módulo em `pipeline/common/` (ex.: `pipeline/common/features.py` para encoders reusáveis).
 3. **Nunca** `import mlflow` (só `tracking.py` pode) nem `import platform`/
    `from platform...` (Rule 06) — as cancelas `check_mlflow.py`/`check_platform.py`
    barram no CI.

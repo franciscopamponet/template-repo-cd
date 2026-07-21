@@ -42,8 +42,8 @@ Aqui a gente explica o *porquê* de cada passo.
               │
               ▼
    ┌─────────────────────┐
-   │  5. rode o pipeline  │  uv run python entrypoints/run_local.py
-   │                     │            --config config/<modelo>.yaml
+   │  5. rode o pipeline  │  uv run python pipeline/entrypoints/run_local.py
+   │                     │            --config pipeline/config/<modelo>.yaml
    └─────────────────────┘
 ```
 
@@ -110,7 +110,7 @@ Ele vai te fazer três perguntas:
 2. **Databricks? (S/N)** — o *toggle*. É a decisão mais importante do init (detalhe
    abaixo).
 3. **Nome do primeiro modelo** — em `snake_case` (ex.: `churn`). O init renomeia o
-   modelo de exemplo (`models/exemplo_modelo/` e `config/exemplo_modelo.yaml`) para esse
+   modelo de exemplo (`pipeline/models/exemplo_modelo/` e `pipeline/config/exemplo_modelo.yaml`) para esse
    nome, atualizando todas as referências. Assim você já começa com um modelo real seu,
    no lugar do exemplo.
 
@@ -188,21 +188,21 @@ minutos e economiza muitas idas e vindas depois.
 Todo pipeline é dirigido pelo config do modelo. Para rodar o modelo que o init criou:
 
 ```bash
-uv run python entrypoints/run_local.py --config config/<modelo>.yaml
+uv run python pipeline/entrypoints/run_local.py --config pipeline/config/<modelo>.yaml
 ```
 
 (troque `<modelo>` pelo nome que você deu no init). A saída traz o `run_id` do MLflow e
 as métricas do modelo — algo como `run_id: ...` seguido de
 `métricas: {'accuracy': ..., 'f1': ...}`. Se você ainda não tem o dado que o config
 aponta, gere/aponte um primeiro; o config de exemplo espera um Parquet em
-`data/raw/`.
+`pipeline/data/raw/`.
 
 ### Onde as coisas moram
 
-- **`config/`** — os parâmetros. Um YAML por modelo (`config/<modelo>.yaml`), com o
+- **`pipeline/config/`** — os parâmetros. Um YAML por modelo (`pipeline/config/<modelo>.yaml`), com o
   mesmo nome da pasta do modelo. Caminho de dados, tabela, hiperparâmetros, nome do
   experimento: tudo vem daqui, nunca fica fixo no código. Mexeu em parâmetro? É aqui.
-- **`models/<modelo>/`** — o modelo em si, sempre com **exatamente cinco arquivos** (a
+- **`pipeline/models/<modelo>/`** — o modelo em si, sempre com **exatamente cinco arquivos** (a
   "anatomia de 5 arquivos"), cada um com um papel:
   - `prepare_data.py` — pede o dado à interface e devolve treino/teste prontos (nunca
     sabe de *onde* o dado vem);
@@ -211,10 +211,10 @@ aponta, gere/aponte um primeiro; o config de exemplo espera um Parquet em
   - `evaluate_model.py` — calcula as métricas;
   - `orchestrator.py` — a espinha dorsal: amarra os quatro acima e é o **único** que
     fala com o MLflow.
-- **`common/`** — o que é compartilhado entre modelos: a interface de dados
+- **`pipeline/common/`** — o que é compartilhado entre modelos: a interface de dados
   (`DataSource`), o wrapper de tracking do MLflow, utilitários de split. Se uma lógica
   serve a mais de um modelo, o lugar dela é aqui — nunca um sexto arquivo dentro de
-  `models/<modelo>/`.
+  `pipeline/models/<modelo>/`.
 
 ### Precisa ir além do modelo inicial?
 
@@ -245,7 +245,7 @@ metades — o **molde** em `docs/` e o **seu projeto** em `.claude/` — e apont
 
 Boa parte das regras deste repo não é só conselho — é **verificada automaticamente pelo
 CI**. Se você criar um arquivo solto na raiz, ou fizer algum arquivo `import mlflow`
-fora do `orchestrator`/`common/tracking.py`, ou o núcleo importar de `platform/`, **o CI
+fora do `orchestrator`/`pipeline/common/tracking.py`, ou o núcleo importar de `platform/`, **o CI
 barra o seu merge**. Não é implicância: cada uma dessas travas existe por um motivo que
 está escrito em `docs/rules/`. Se uma cancela te parar, leia a regra correspondente —
 a mensagem de erro te diz qual é. E, para checar tudo localmente **antes** de commitar,

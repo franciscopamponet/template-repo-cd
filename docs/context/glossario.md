@@ -17,21 +17,21 @@ Databricks (`databricks.yml`, `resources/`, `MLProject`, `conda.yaml`). Só sobr
 se o toggle for SIM.
 
 **Anatomia de 5 arquivos** — o contrato inegociável de todo modelo em
-`models/<nome>/`: `prepare_data.py`, `build_model.py`, `train.py`,
+`pipeline/models/<nome>/`: `prepare_data.py`, `build_model.py`, `train.py`,
 `evaluate_model.py`, `orchestrator.py`. Nem mais, nem menos.
 
 **Mini-cérebro nativo** — o princípio de que toda a inteligência de execução
 (contexto, rules, guias, skills) mora versionada dentro do repo, em `.claude/`. Nada
 depende de conhecimento externo.
 
-**DataSource** — o `Protocol` de interface de dados neutra definido em `common/`. As
+**DataSource** — o `Protocol` de interface de dados neutra definido em `pipeline/common/`. As
 implementações concretas (`SparkTableSource`, `ParquetSource`, `SQLSource`) moram em
-`data/sources/` e são escolhidas via config. O pipeline pede o dado à interface e
+`pipeline/data/sources/` e são escolhidas via config. O pipeline pede o dado à interface e
 nunca sabe de onde ele vem.
 
 **MLflow** — a ferramenta de tracking de experimentos. Obrigatória sempre. O toggle
 decide apenas ONDE ela guarda os dados (local vs. Databricks), nunca SE existe. Só o
-`orchestrator.py` fala com ela, via `common/tracking.py`.
+`orchestrator.py` fala com ela, via `pipeline/common/tracking.py`.
 
 **Raiz mínima** — o princípio de que a raiz do repo só contém o que tecnicamente não
 funciona em outro lugar. Tudo o mais mora em subpastas.

@@ -18,7 +18,7 @@ sem ela.
 | arquivo | papel |
 | ------- | ----- |
 | [`databricks.yml`](../../platform/databricks.yml) | Databricks Asset Bundle: `targets` (dev/prod), `variables`, host do workspace. Traz placeholders `<PREENCHER: ...>`. |
-| [`resources/treino_<modelo>.yml`](../../platform/resources/) | job serverless de treino; aponta para `entrypoints/run_serverless.py` e passa só o `--config` (Rule 07). |
+| [`resources/treino_<modelo>.yml`](../../platform/resources/) | job serverless de treino; aponta para `pipeline/entrypoints/run_serverless.py` e passa só o `--config` (Rule 07). |
 | [`MLProject`](../../platform/MLProject) | manifesto MLflow Project (`mlflow run . -e treino -P config=...`); ambiente vem do `conda.yaml`. |
 | `conda.yaml` | **gerado** por `tools/gen_conda.py` a partir do `pyproject.toml`. Cabeçalho "ARQUIVO GERADO — NÃO EDITE". |
 
@@ -55,4 +55,4 @@ A cancela `tools/check_manifest.py` refaz essa checagem no CI e **pula** quando
   batendo com o modelo (Rule 05) e ajuste o `--config`.
 
 > Toggle = Não: nada disto existe no projeto, e o núcleo roda igual. Não importe de
-> `platform/` a partir de `config/`, `data/`, `models/`, `common/` ou `entrypoints/`.
+> `platform/` a partir de `pipeline/config/`, `pipeline/data/`, `pipeline/models/`, `pipeline/common/` ou `pipeline/entrypoints/`.

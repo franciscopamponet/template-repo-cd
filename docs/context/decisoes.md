@@ -29,7 +29,7 @@ pela decisão 5 (forward-only).
 plataforma não pode contaminar o núcleo, nem podem existir duas versões do esqueleto.
 
 **Decisão:** `tools/init.py` pergunta "Databricks? S/N". Se Não, poda a pasta
-`platform/` e seta o modo dos `entrypoints/`. O núcleo nunca é tocado pelo toggle.
+`platform/` e seta o modo dos `pipeline/entrypoints/`. O núcleo nunca é tocado pelo toggle.
 
 **Consequências:** o núcleo permanece neutro e idêntico nos dois cenários; `platform/`
 é a casca inteira que o toggle liga/desliga (invariante central); nada do núcleo importa
@@ -53,13 +53,13 @@ regerar os artefatos no mesmo commit (decisão 3), o que o CI verifica; editar
 Parquet, SQL). Acoplar `prepare_data` à origem torna o pipeline rígido e difícil de
 testar.
 
-**Decisão:** um `Protocol` `DataSource` em `common/`; implementações concretas
-(`ParquetSource`, `SparkTableSource`, `SQLSource`) em `data/sources/`, escolhidas via
+**Decisão:** um `Protocol` `DataSource` em `pipeline/common/`; implementações concretas
+(`ParquetSource`, `SparkTableSource`, `SQLSource`) em `pipeline/data/sources/`, escolhidas via
 config. O código de preparação só pede o dado à interface; nunca sabe de onde vem.
 
 **Consequências:** trocar a origem é trocar uma linha de config, não reescrever código;
-testar fica fácil; a definição do `Protocol` mora em `common/`, as implementações em
-`data/sources/`.
+testar fica fácil; a definição do `Protocol` mora em `pipeline/common/`, as implementações em
+`pipeline/data/sources/`.
 
 ## 4. Mini-cérebro nativo + raiz mínima
 
@@ -146,3 +146,26 @@ Além disso, a raiz tinha dois pontos de entrada — `AGENTS.md` com o conteúdo
   pessoa/IA lê os mesmos `.md`; se outra ferramenta virar padrão, renomeia-se o
   ponteiro sem reescrever conteúdo.
 - A raiz mínima é reforçada: um único arquivo de entrada em vez de dois.
+
+## 9. Uma pasta só para o trabalho do analista: `pipeline/`
+
+**Contexto:** a raiz tinha seis pastas de código lado a lado (`common/`, `config/`,
+`data/`, `entrypoints/`, `models/`, `platform/`), o que diluía "onde eu de fato
+trabalho" e confundia analistas na hora de executar.
+
+**Decisão:** agrupar sob uma única pasta **`pipeline/`** tudo que o analista cria e
+edita — `common/`, `config/`, `data/`, `entrypoints/` e `models/`. `platform/` fica
+**de fora** (é infra de deploy, opcional e pouco tocada, mais próxima de `tools/` e
+`.github/`). Usa-se um **src-layout**: o `pipeline/` entra no `sys.path` (via o editable
+install e o `pythonpath` do pytest), então os imports continuam de primeiro nível
+(`from common...`, `from models...`) — sem prefixo `pipeline.` no código.
+
+**Consequências:**
+- A raiz vira uma vitrine enxuta; o analista tem um lugar óbvio para trabalhar.
+- Reforça a raiz mínima (decisão 4): as pastas de código não têm requisito técnico para
+  estar na raiz.
+- Custo: os comandos ficam um nível mais longos
+  (`uv run python pipeline/entrypoints/run_local.py --config pipeline/config/<modelo>.yaml`).
+- `check_root.py` passa a permitir `pipeline/` (uma entrada) no lugar das cinco pastas;
+  `check_platform.py` varre `pipeline/`; o `init.py` opera sob `pipeline/`. `platform/`
+  segue na raiz, verificada como antes.

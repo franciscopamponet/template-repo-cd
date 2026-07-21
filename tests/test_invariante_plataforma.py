@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-NUCLEO = ["common", "models", "data", "entrypoints"]
+NUCLEO = ["pipeline/common", "pipeline/models", "pipeline/data", "pipeline/entrypoints"]
 
 
 def arquivos_do_nucleo() -> list[Path]:
@@ -50,6 +50,7 @@ def test_nucleo_nao_importa_platform(caminho: Path):
 
 def test_nucleo_roda_sem_a_pasta_platform(tmp_path, monkeypatch):
     """Simula o toggle = Não: sem `platform/`, o núcleo ainda importa e roda."""
+    import os
     import shutil
     import subprocess
     import sys
@@ -66,6 +67,8 @@ def test_nucleo_roda_sem_a_pasta_platform(tmp_path, monkeypatch):
     )
     assert not (copia / "platform").exists()
 
+    # O núcleo mora sob pipeline/ (src-layout): é ele que entra no PYTHONPATH.
+    env = {**os.environ, "PYTHONPATH": str(copia / "pipeline")}
     resultado = subprocess.run(
         [
             sys.executable,
@@ -75,6 +78,7 @@ def test_nucleo_roda_sem_a_pasta_platform(tmp_path, monkeypatch):
             "print('nucleo OK sem platform/')",
         ],
         cwd=copia,
+        env=env,
         capture_output=True,
         text=True,
     )

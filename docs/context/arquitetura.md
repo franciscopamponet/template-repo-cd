@@ -21,17 +21,19 @@
 │   └── rules/ guides/ skills/← espaço para acréscimos específicos do projeto
 ├── tools/
 │   └── init.py               ← roda 1x após copiar: pergunta o toggle, poda platform/, nomeia o projeto
-├── config/                   ← config por modelo (pipeline config-driven)
-├── data/                     ← implementações concretas da interface de dados
-├── models/<modelo>/          ← anatomia OBRIGATÓRIA de 5 arquivos por modelo:
-│   ├── prepare_data.py
-│   ├── build_model.py
-│   ├── train.py
-│   ├── evaluate_model.py
-│   └── orchestrator.py       ← espinha dorsal + ÚNICO ponto de contato com MLflow
-├── common/                   ← lógica compartilhada entre modelos (contratos, tracking, splits)
-├── entrypoints/              ← launchers finos (modo local/serverless, conforme toggle)
-└── platform/                 ← SÓ sobrevive se toggle = SIM (o init.py poda se Não)
+├── tests/                    ← testes do molde
+├── pipeline/                 ← ★ ONDE O ANALISTA TRABALHA (decisão 9)
+│   ├── config/               ← config por modelo (pipeline config-driven)
+│   ├── data/                 ← implementações concretas da interface de dados (data/sources/)
+│   ├── models/<modelo>/      ← anatomia OBRIGATÓRIA de 5 arquivos por modelo:
+│   │   ├── prepare_data.py
+│   │   ├── build_model.py
+│   │   ├── train.py
+│   │   ├── evaluate_model.py
+│   │   └── orchestrator.py   ← espinha dorsal + ÚNICO ponto de contato com MLflow
+│   ├── common/               ← lógica compartilhada entre modelos (contratos, tracking, splits)
+│   └── entrypoints/          ← launchers finos (modo local/serverless, conforme toggle)
+└── platform/                 ← infra opcional; SÓ sobrevive se toggle = SIM (fica FORA de pipeline/)
     ├── databricks.yml
     ├── resources/
     ├── MLProject
@@ -69,16 +71,16 @@ gosto. A documentação do molde mora em `docs/`; o contexto do projeto, em `.cl
 
 ## Anatomia de 5 arquivos (por modelo)
 
-Todo modelo em `models/<nome>/` tem exatamente:
+Todo modelo em `pipeline/models/<nome>/` tem exatamente:
 
 1. `prepare_data.py`   — prepara os dados (pede o dado à interface `DataSource`, nunca sabe de onde vem).
 2. `build_model.py`    — constrói o modelo.
 3. `train.py`          — treina.
 4. `evaluate_model.py` — avalia.
-5. `orchestrator.py`   — espinha dorsal + **único ponto de contato com MLflow** (via `common/tracking.py`).
+5. `orchestrator.py`   — espinha dorsal + **único ponto de contato com MLflow** (via `pipeline/common/tracking.py`).
 
 ## Interface de dados neutra
 
-Um `Protocol` `DataSource` definido em `common/`, com implementações concretas
-(`SparkTableSource`, `ParquetSource`, `SQLSource`) em `data/sources/`, escolhidas via
-config. O código de preparação só pede o dado à interface; nunca sabe de onde ele vem.
+Um `Protocol` `DataSource` definido em `pipeline/common/`, com implementações concretas
+(`SparkTableSource`, `ParquetSource`, `SQLSource`) em `pipeline/data/sources/`, escolhidas
+via config. O código de preparação só pede o dado à interface; nunca sabe de onde ele vem.

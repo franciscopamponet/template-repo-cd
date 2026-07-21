@@ -29,7 +29,7 @@ entrada único, para IA ou pessoa, é o [`CLAUDE.md`](CLAUDE.md).
    python3 tools/init.py
    ```
    Ele pergunta o toggle Databricks (S/N), poda `platform/` se Não, define o modo dos
-   `entrypoints/` e nomeia o projeto. Ao terminar, se autodestrói.
+   `pipeline/entrypoints/` e nomeia o projeto. Ao terminar, se autodestrói.
 3. **Instale as dependências:**
    ```bash
    uv sync
@@ -42,7 +42,7 @@ entrada único, para IA ou pessoa, é o [`CLAUDE.md`](CLAUDE.md).
 O pipeline é dirigido pelo config do modelo (Rule 07). Execução local:
 
 ```bash
-uv run python entrypoints/run_local.py --config config/<modelo>.yaml
+uv run python pipeline/entrypoints/run_local.py --config pipeline/config/<modelo>.yaml
 # saída: run_id: ... / métricas: {'accuracy': ..., 'f1': ...}
 ```
 

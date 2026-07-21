@@ -17,7 +17,7 @@ from common.splits import random_split, temporal_split
 
 
 def test_load_config_valida_exemplo():
-    cfg = load_config("config/exemplo_modelo.yaml")
+    cfg = load_config("pipeline/config/exemplo_modelo.yaml")
     assert isinstance(cfg, BaseModelConfig)
     assert cfg.name == "exemplo_modelo"
     assert cfg.data_source.type == "parquet"
@@ -37,7 +37,7 @@ def test_tracking_local_e_o_default_do_schema():
 
 def test_load_config_arquivo_inexistente():
     with pytest.raises(FileNotFoundError):
-        load_config("config/nao_existe.yaml")
+        load_config("pipeline/config/nao_existe.yaml")
 
 
 def test_parquet_source_roundtrip(tmp_path):

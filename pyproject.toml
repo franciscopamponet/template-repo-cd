@@ -35,9 +35,11 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-# O núcleo do esqueleto vive em pacotes de primeiro nível (config, data, models,
-# common, entrypoints). Ainda não há código; declaramos os pacotes conforme surgem.
-packages = ["common"]
+# src-layout: o código do analista vive sob pipeline/, mas é importado por nome de
+# primeiro nível (from common..., from models...). Declarar pipeline/common aqui faz
+# o editable install colocar pipeline/ no sys.path, cobrindo também os namespace
+# packages irmãos (models, data, entrypoints). Declaramos mais pacotes conforme surgem.
+packages = ["pipeline/common"]
 
 [tool.uv]
 # Extras de plataforma nunca entram por padrão: o núcleo instala sozinho (Rule 06).
@@ -47,6 +49,10 @@ default-groups = ["dev"]
 target-version = "py311"
 line-length = 100
 extend-exclude = ["platform"]
+# src-layout: o núcleo mora sob pipeline/ mas é importado por nome de primeiro nível
+# (from common..., from models...). Isso ensina o isort do ruff a tratá-los como
+# first-party, ordenando os imports corretamente.
+src = ["pipeline", "."]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
@@ -57,4 +63,4 @@ quote-style = "double"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
-pythonpath = ["."]
+pythonpath = ["pipeline", "."]

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Cancela: MLFLOW É CENTRALIZADO (Rule 01).
 
-Só `common/tracking.py` importa mlflow. Nenhum outro arquivo — nem os 4 primeiros da
-anatomia, nem `data/`, nem `config/`, nem entrypoints. Quem quiser logar experimento
-passa pelo `orchestrator.py` -> `common/tracking.py`.
+Só `pipeline/common/tracking.py` importa mlflow. Nenhum outro arquivo — nem os 4
+primeiros da anatomia, nem `pipeline/data/`, nem `pipeline/config/`, nem entrypoints.
+Quem quiser logar experimento passa pelo `orchestrator.py` -> `pipeline/common/tracking.py`.
 
 Usa AST, não grep: uma docstring que MENCIONA mlflow ("NÃO importa mlflow") não é
 uma violação, e `import mlflow as mf` é.
@@ -23,7 +23,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # O único arquivo do repo autorizado a falar com mlflow.
-AUTORIZADO = Path("common/tracking.py")
+AUTORIZADO = Path("pipeline/common/tracking.py")
 
 IGNORAR_PASTAS = {".venv", ".git", "__pycache__", ".pytest_cache", ".ruff_cache", "dist"}
 
@@ -67,8 +67,8 @@ def main() -> int:
         return 0
 
     print("ERRO: VAZAMENTO DE MLFLOW (Rule 01)\n")
-    print("MLflow é centralizado: só common/tracking.py importa mlflow. O tracking")
-    print("passa pelo orchestrator.py -> common/tracking.py. Espalhar `import mlflow`")
+    print("MLflow é centralizado: só pipeline/common/tracking.py importa mlflow. O tracking")
+    print("passa pelo orchestrator.py -> pipeline/common/tracking.py. Espalhar `import mlflow`")
     print("acopla o pipeline à ferramenta e quebra o toggle de plataforma.\n")
 
     for arquivo, violacoes in sorted(encontrados.items()):
@@ -77,7 +77,7 @@ def main() -> int:
             print(f"      {v}")
 
     print("\nComo corrigir: remova o import e roteie o que você precisa por")
-    print("common/tracking.py, chamado a partir do orchestrator.py do seu modelo.")
+    print("pipeline/common/tracking.py, chamado a partir do orchestrator.py do seu modelo.")
     return 1
 
 

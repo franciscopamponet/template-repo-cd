@@ -22,12 +22,12 @@ python3 tools/init.py --name "Previsão de Churn" --databricks no --model churn 
 O `init.py` pergunta:
 - **Nome do projeto** → vira o `name`/descrição do `pyproject`, título do README, etc.
 - **Databricks? S/N** — o toggle (Decisão 1):
-  - **Não** → remove `platform/`, `entrypoints/run_serverless.py`, o extra `databricks`
+  - **Não** → remove `platform/`, `pipeline/entrypoints/run_serverless.py`, o extra `databricks`
     do pyproject e `tools/gen_conda.py`. As **cancelas** (`check_*.py`, `check.py`)
     **sobrevivem** — o CI é o mesmo com ou sem Databricks (ver decisão 7 em docs/context/decisoes.md).
   - **Sim** → mantém `platform/` e regenera o `conda.yaml` em sync (Rule 03).
-- **Nome do primeiro modelo** (snake_case) → renomeia `models/exemplo_modelo/` e
-  `config/exemplo_modelo.yaml` para esse nome, atualizando todas as referências.
+- **Nome do primeiro modelo** (snake_case) → renomeia `pipeline/models/exemplo_modelo/` e
+  `pipeline/config/exemplo_modelo.yaml` para esse nome, atualizando todas as referências.
 
 Ao terminar, o script **se autodestrói** (`tools/init.py` some) — ele só faz sentido
 uma vez. Rodar de novo é barrado por uma checagem de pré-voo.
@@ -41,10 +41,10 @@ Instala o núcleo (sem extras de plataforma por default — Rule 06).
 ## 4. Primeiros passos
 ```bash
 # edite o config do seu modelo (fonte de dados, params) — Rule 07:
-$EDITOR config/<modelo>.yaml
+$EDITOR pipeline/config/<modelo>.yaml
 
 # gere/aponte para o dado que o config espera, então rode ponta a ponta:
-uv run python entrypoints/run_local.py --config config/<modelo>.yaml
+uv run python pipeline/entrypoints/run_local.py --config pipeline/config/<modelo>.yaml
 # saída esperada: run_id: ... / métricas: {'accuracy': ..., 'f1': ...}
 
 # valide o repo inteiro antes do primeiro commit:

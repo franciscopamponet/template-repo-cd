@@ -2,7 +2,7 @@
 # Manifesto MLflow Project — casca OPCIONAL (toggle = Sim).
 #
 # Permite rodar o pipeline como um MLflow Project:
-#   mlflow run . -e treino -P config=config/exemplo_modelo.yaml
+#   mlflow run . -e treino -P config=pipeline/config/exemplo_modelo.yaml
 #
 # O ambiente vem do conda.yaml, que é GERADO a partir do pyproject.toml
 # (Decisão 2 / Rule 02) — nunca escrito à mão. Regere com:
@@ -22,11 +22,11 @@ entry_points:
       config:
         type: str
         description: Caminho do YAML de config do modelo (Rule 07).
-    command: "python ../entrypoints/run_serverless.py --config {config}"
+    command: "python ../pipeline/entrypoints/run_serverless.py --config {config}"
 
   treino_local:
     parameters:
       config:
         type: str
         description: Caminho do YAML de config do modelo (Rule 07).
-    command: "python ../entrypoints/run_local.py --config {config}"
+    command: "python ../pipeline/entrypoints/run_local.py --config {config}"

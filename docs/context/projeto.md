@@ -26,9 +26,9 @@ funcionar, está errado. O conhecimento é separado pela sua natureza (decisão 
 1. **Copie** este esqueleto para um novo diretório (cópia independente — ver
    [decisoes.md](decisoes.md), decisão 0). Não há repo-mãe hospedando N projetos.
 2. **Rode `tools/init.py` uma única vez.** Ele pergunta o toggle Databricks (S/N),
-   poda a pasta `platform/` se Não, define o modo dos `entrypoints/` e nomeia o projeto.
-3. **Comece a trabalhar** dentro da estrutura já pronta: config por modelo em `config/`,
-   modelos em `models/<nome>/` (anatomia de 5 arquivos), lógica compartilhada em `common/`.
+   poda a pasta `platform/` se Não, define o modo dos `pipeline/entrypoints/` e nomeia o projeto.
+3. **Comece a trabalhar** dentro da estrutura já pronta: config por modelo em `pipeline/config/`,
+   modelos em `pipeline/models/<nome>/` (anatomia de 5 arquivos), lógica compartilhada em `pipeline/common/`.
 
 Passo a passo detalhado na skill
 [`iniciar-projeto-novo-a-partir-do-esqueleto.md`](../skills/iniciar-projeto-novo-a-partir-do-esqueleto.md).
@@ -39,16 +39,16 @@ Todas as camadas existem e o pipeline foi **validado ponta a ponta nos dois togg
 (Databricks Sim e Não): `init.py` → `uv sync` → treino/avaliação → logging via MLflow,
 com a suíte de testes e as cancelas de CI verdes nas duas cópias.
 
-- **Modelo de referência**: [`models/exemplo_modelo/`](../../models/exemplo_modelo/) —
+- **Modelo de referência**: [`pipeline/models/exemplo_modelo/`](../../pipeline/models/exemplo_modelo/) —
   um classificador (RandomForest) completo na anatomia de 5 arquivos, com config em
-  [`config/exemplo_modelo.yaml`](../../config/exemplo_modelo.yaml).
-- **Núcleo**: `common/` (config pydantic, `Protocol DataSource` + factory, `Tracker` de
-  MLflow, splits), `data/sources/` (Parquet/Spark/SQL), `entrypoints/` (local/serverless).
+  [`pipeline/config/exemplo_modelo.yaml`](../../pipeline/config/exemplo_modelo.yaml).
+- **Núcleo**: `pipeline/common/` (config pydantic, `Protocol DataSource` + factory, `Tracker` de
+  MLflow, splits), `pipeline/data/sources/` (Parquet/Spark/SQL), `pipeline/entrypoints/` (local/serverless).
 - **Cancelas de CI**: `tools/check.py` roda tudo (ruff, pytest, raiz mínima, manifesto
   em sync, isolamento de MLflow e de plataforma). Ver `.github/workflows/ci.yml`.
 - **MLflow**: default local é backend **SQLite** (o file store `./mlruns` foi
   descontinuado). O caminho Databricks ainda **não** foi validado em workspace real
-  (ver nota em `common/tracking.py`).
+  (ver nota em `pipeline/common/tracking.py`).
 
 ## O que ler antes de mexer
 
