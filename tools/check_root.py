@@ -33,7 +33,7 @@ ARQUIVOS_PERMITIDOS = {
 PASTAS_PERMITIDAS = {
     ".github": "o GitHub Actions só executa a partir daqui",
     ".claude": "contexto DESTE projeto, preenchido ao longo do tempo (decisão 8)",
-    "pipeline": "onde o analista trabalha: common, config, data, entrypoints, models (decisão 9)",
+    "pipeline": "onde o analista trabalha: common, config, data, entrypoints, models, notebooks",
     "docs": "documentação do MOLDE: context, rules, guides, skills, decisões",
     "platform": "casca opcional de plataforma (podada se toggle = Não)",
     "tests": "testes",

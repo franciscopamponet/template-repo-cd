@@ -24,6 +24,7 @@
 ├── tests/                    ← testes do molde
 ├── pipeline/                 ← ★ ONDE O ANALISTA TRABALHA (decisão 9)
 │   ├── config/               ← config por modelo (pipeline config-driven)
+│   ├── notebooks/            ← notebooks (.ipynb): análise exploratória, tratamento, merges
 │   ├── data/                 ← implementações concretas da interface de dados (data/sources/)
 │   ├── models/<modelo>/      ← anatomia OBRIGATÓRIA de 5 arquivos por modelo:
 │   │   ├── prepare_data.py
