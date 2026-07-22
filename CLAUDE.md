@@ -8,6 +8,24 @@ Apesar do nome do arquivo, o conteúdo é **neutro**: vale para qualquer IA ou p
 só para o Claude. Este é o único ponto de entrada da raiz (ver decisão 8 em
 `docs/context/decisoes.md`).
 
+## PARA A IA: o que abrir ANTES de ajudar
+
+Você recebe este `CLAUDE.md` automaticamente, mas **não** o conteúdo dos arquivos que
+ele cita — você precisa abri-los. Antes de guiar qualquer pessoa, faça nesta ordem:
+
+1. **Descubra a fase do repo:**
+   - **Cópia nova, ainda não inicializada** — sinais: existe `tools/init.py`, existe
+     `pipeline/models/exemplo_modelo/`, e o `pyproject.toml` ainda tem
+     `name = "esqueleto-ciencia-de-dados"`. Nesse caso, **o PRIMEIRO arquivo a abrir e
+     seguir é [`docs/skills/iniciar-projeto-novo-a-partir-do-esqueleto.md`](docs/skills/iniciar-projeto-novo-a-partir-do-esqueleto.md)**
+     (o passo a passo), com [`docs/GUIA-DO-ANALISTA.md`](docs/GUIA-DO-ANALISTA.md) ao
+     lado para o *porquê* de cada passo. É ele que conduz o analista da cópia ao
+     primeiro pipeline rodando.
+   - **Projeto já inicializado** (o `init.py` já rodou e sumiu) — leia `docs/rules/`
+     (obrigatório), o `.claude/context/` (o que ESTE projeto é) e o guia da camada que
+     você vai tocar em `docs/guides/`.
+2. **Só então** responda ou aja.
+
 ## As duas metades: molde × projeto
 
 A documentação está separada pela **natureza** da informação:
