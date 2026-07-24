@@ -58,6 +58,15 @@ No seu projeto (`.claude/`):
 - `.claude/rules/`, `.claude/guides/`, `.claude/skills/` — espaço para acréscimos
   específicos do seu projeto (começam vazios; as versões do molde estão em `docs/`).
 
+## Regras específicas deste projeto
+
+Regras de **comportamento desta cópia** (ex.: métrica padrão, nomeação de tabelas),
+criadas pela skill `criar-rule` e carregadas em toda sessão via `@import` abaixo. Não
+confundir com as rules do molde (`docs/rules/`, verificadas pelo CI) — estas aqui são
+soft e específicas do projeto. Enquanto vazio, não há regras específicas ainda.
+
+<!-- criar-rule: inserir os @import das regras do projeto ABAIXO desta linha -->
+
 ## Primeiro contato?
 
 Se você é analista e nunca viu este padrão, comece pelo
