@@ -1,9 +1,8 @@
 # Arquitetura deste projeto
 
-> **Template a preencher.** As particularidades de arquitetura DESTE projeto que fogem
-> ou estendem o padrão do molde: fluxos de dado próprios, integrações externas,
+> **Template a preencher.** As PARTICULARIDADES DE ARQUITETURA DESTE PROJETO que FOGEM OU ESTENDEM
+> o padrão do molde: fluxos de dado próprios, integrações externas,
 > agendamentos, decisões de modelagem que impactam a estrutura.
->
 > A arquitetura do **molde** (estrutura-alvo do repo, invariante central, anatomia de 5
 > arquivos, interface de dados neutra) está em
 > [`docs/context/arquitetura.md`](../../docs/context/arquitetura.md) — não a repita aqui.
