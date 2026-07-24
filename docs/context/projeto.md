@@ -31,7 +31,7 @@ funcionar, está errado. O conhecimento é separado pela sua natureza (decisão 
    modelos em `pipeline/models/<nome>/` (anatomia de 5 arquivos), lógica compartilhada em `pipeline/common/`.
 
 Passo a passo detalhado na skill
-[`iniciar-projeto-novo-a-partir-do-esqueleto.md`](../skills/iniciar-projeto-novo-a-partir-do-esqueleto.md).
+[`iniciar-projeto-novo-a-partir-do-esqueleto`](../../.claude/skills/iniciar-projeto-novo-a-partir-do-esqueleto/SKILL.md).
 
 ## Estado atual (o esqueleto está VIVO)
 
@@ -56,4 +56,4 @@ com a suíte de testes e as cancelas de CI verdes nas duas cópias.
 - [decisoes.md](decisoes.md) — as decisões já ratificadas (não reabrir).
 - `../rules/` — comportamento inegociável. **Leitura obrigatória antes de qualquer alteração.**
 - `../guides/` — um guia por camada (config, data, models, common, entrypoints, platform).
-- `../skills/` — procedimentos passo a passo para as tarefas comuns.
+- `../../.claude/skills/` — skills invocáveis para as tarefas comuns (adicionar modelo, fonte, dependência…).

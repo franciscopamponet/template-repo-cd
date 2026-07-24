@@ -1,4 +1,9 @@
-# Skill — Adicionar uma dependência
+---
+name: adicionar-dependencia
+description: Use quando o usuário quer adicionar ou remover uma DEPENDÊNCIA do projeto. Conduz o fluxo pyproject → uv lock → regerar conda → CI, mantendo o manifesto em sync (Rules 02 e 03).
+---
+
+# Adicionar uma dependência
 
 `pyproject.toml` é a **fonte única** de dependências (Rule 02). `conda.yaml` e qualquer
 requirements são **derivados** dele, nunca escritos à mão (Rule 03). Esta skill mantém

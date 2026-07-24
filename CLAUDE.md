@@ -16,11 +16,11 @@ ele cita — você precisa abri-los. Antes de guiar qualquer pessoa, faça nesta
 1. **Descubra a fase do repo:**
    - **Cópia nova, ainda não inicializada** — sinais: existe `tools/init.py`, existe
      `pipeline/models/exemplo_modelo/`, e o `pyproject.toml` ainda tem
-     `name = "esqueleto-ciencia-de-dados"`. Nesse caso, **o PRIMEIRO arquivo a abrir e
-     seguir é [`docs/skills/iniciar-projeto-novo-a-partir-do-esqueleto.md`](docs/skills/iniciar-projeto-novo-a-partir-do-esqueleto.md)**
-     (o passo a passo), com [`docs/GUIA-DO-ANALISTA.md`](docs/GUIA-DO-ANALISTA.md) ao
-     lado para o *porquê* de cada passo. É ele que conduz o analista da cópia ao
-     primeiro pipeline rodando.
+     `name = "esqueleto-ciencia-de-dados"`. Nesse caso, **o PRIMEIRO passo é invocar a
+     skill `iniciar-projeto-novo-a-partir-do-esqueleto`** (ou abrir
+     `.claude/skills/iniciar-projeto-novo-a-partir-do-esqueleto/SKILL.md`), com
+     [`docs/GUIA-DO-ANALISTA.md`](docs/GUIA-DO-ANALISTA.md) ao lado para o *porquê* de
+     cada passo. Ela conduz o analista da cópia ao primeiro pipeline rodando.
    - **Projeto já inicializado** (o `init.py` já rodou e sumiu) — leia `docs/rules/`
      (obrigatório), o `.claude/context/` (o que ESTE projeto é) e o guia da camada que
      você vai tocar em `docs/guides/`.
@@ -37,7 +37,8 @@ A documentação está separada pela **natureza** da informação:
   longo do projeto**. (Pasta oculta — use `ls -a`.)
 
 Regra de ouro: se a informação descreve *o padrão*, mora em `docs/`; se descreve *este
-projeto*, mora em `.claude/`.
+projeto*, mora em `.claude/`. **Exceção técnica:** Skills invocáveis (mesmo as do molde)
+só funcionam em `.claude/skills/` — o Claude Code não as descobre em `docs/` (decisão 10).
 
 ## Onde as coisas moram
 
@@ -47,7 +48,6 @@ No molde (`docs/`):
 - `docs/rules/`    — comportamento **inegociável**: o que você pode e não pode fazer.
   **Leitura obrigatória antes de alterar qualquer coisa.** É verificado pelo CI.
 - `docs/guides/`   — um guia por camada (config, data, models, common, entrypoints, platform).
-- `docs/skills/`   — procedimentos passo a passo (adicionar modelo, fonte de dados, dependência…).
 - `docs/context/decisoes.md` — todas as decisões de arquitetura do esqueleto, num arquivo só.
 - `docs/GUIA-DO-ANALISTA.md`  — onboarding narrado, da cópia ao primeiro pipeline rodando.
 
@@ -55,8 +55,11 @@ No seu projeto (`.claude/`):
 
 - `.claude/context/` — **comece aqui ao herdar o repo**: preencha `projeto.md`,
   `glossario.md`, `decisoes.md` e `arquitetura.md` com o contexto da SUA cópia.
-- `.claude/rules/`, `.claude/guides/`, `.claude/skills/` — espaço para acréscimos
-  específicos do seu projeto (começam vazios; as versões do molde estão em `docs/`).
+- `.claude/skills/` — **Skills invocáveis** (o Claude descobre e chama sozinho). Todas
+  as skills moram aqui — as do molde (adicionar modelo, fonte de dados, dependência,
+  iniciar projeto, criar-skill, criar-rule) e as que você criar. Ver decisão 10.
+- `.claude/rules/`, `.claude/guides/` — espaço para acréscimos específicos do seu
+  projeto (as regras de projeto são ligadas via `@import` abaixo).
 
 ## Regras específicas deste projeto
 

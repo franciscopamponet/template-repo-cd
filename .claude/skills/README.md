@@ -1,19 +1,21 @@
-# Skills deste projeto
+# Skills
 
-Atenção: há **dois sentidos** de "skill", e eles moram em lugares diferentes.
+**Todas** as skills do repo moram aqui — não existe mais skill em `docs/`. Skills do
+Claude Code só funcionam neste diretório (`.claude/skills/`), no formato
+`<nome>/SKILL.md` com frontmatter (`name`, `description`). O Claude as **descobre e
+invoca sozinho** quando a situação bate com o `description` (ver decisão 10).
 
-- **`docs/skills/`** — procedimentos-**documentação** do molde (adicionar modelo, fonte
-  de dados, dependência, iniciar projeto). São `.md` que a IA/pessoa **lê**. Não são
-  invocáveis.
-- **`.claude/skills/` (aqui)** — **Skills de verdade do Claude Code**: capacidades que o
-  Claude **descobre e invoca sozinho**. Só funcionam neste diretório, no formato
-  `<nome>/SKILL.md` com frontmatter (`name`, `description`). É por isso que elas vivem
-  aqui, e não em `docs/` — é uma exigência técnica do Claude Code.
+## O que mora aqui
 
-## O que já mora aqui
-- **`criar-skill/`** — uma skill que **cria outras skills** no formato correto. Vem com o
-  molde para facilitar. Peça algo como "cria uma skill que faz X" e ela conduz.
+**Skills do molde** (vêm com o esqueleto, valem em qualquer cópia):
+- `iniciar-projeto-novo-a-partir-do-esqueleto/` — do zero ao primeiro pipeline (copiar → init → uv sync → rodar).
+- `adicionar-novo-modelo/` — criar `pipeline/models/<nome>/` na anatomia de 5 arquivos.
+- `adicionar-nova-fonte-de-dados/` — implementar um novo `DataSource` sem tocar no núcleo.
+- `adicionar-dependencia/` — pyproject → uv lock → regerar conda → CI.
+- `criar-skill/` — cria OUTRAS skills no formato correto.
+- `criar-rule/` — cria regras de projeto (`.claude/rules/`) e as liga no `CLAUDE.md`.
 
-Adicione aqui as skills **específicas do seu projeto**, sempre no formato
-`<nome>/SKILL.md`. Uma skill nova geralmente só é descoberta ao iniciar uma **nova
-sessão** do Claude Code.
+**Skills específicas do seu projeto:** adicione-as aqui, sempre como `<nome>/SKILL.md`.
+Use `criar-skill` para gerar no formato certo.
+
+> Uma skill nova geralmente só é descoberta ao iniciar uma **nova sessão** do Claude Code.

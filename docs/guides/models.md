@@ -50,7 +50,7 @@ with tracker.start_run(run_name=config.name):
 
 ## Como eu adiciono um novo modelo
 
-Ver a skill [`adicionar-novo-modelo.md`](../skills/adicionar-novo-modelo.md) para o
+Ver a skill [`adicionar-novo-modelo`](../../.claude/skills/adicionar-novo-modelo/SKILL.md) para o
 passo a passo. Em resumo: copie `pipeline/models/exemplo_modelo/` para `pipeline/models/<novo>/`, crie
 `pipeline/config/<novo>.yaml` com o mesmo nome (Rule 05), atualize os imports internos (o
 `orchestrator` importa `models.<novo>.prepare_data` etc.) e mantenha os 5 arquivos —

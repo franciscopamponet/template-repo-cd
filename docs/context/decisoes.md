@@ -121,6 +121,8 @@ núcleo não depende da casca de plataforma; a lista `ARTEFATOS_DE_PLATAFORMA` d
 ## 8. Separação molde (`docs/`) × projeto (`.claude/`) e entrada única no `CLAUDE.md`
 
 > **Atualiza as decisões 4 e 6** quanto ao escopo/localização do conteúdo de IA.
+> **Atualizada pela decisão 10** quanto às skills: elas saíram de `docs/` e passaram a
+> viver todas em `.claude/skills/`.
 
 **Contexto:** o mini-cérebro em `.claude/` misturava dois tipos de informação: a que
 descreve o **molde** (igual em todo projeto do núcleo) e a que descreve o **projeto**
@@ -169,3 +171,28 @@ install e o `pythonpath` do pytest), então os imports continuam de primeiro ní
 - `check_root.py` passa a permitir `pipeline/` (uma entrada) no lugar das cinco pastas;
   `check_platform.py` varre `pipeline/`; o `init.py` opera sob `pipeline/`. `platform/`
   segue na raiz, verificada como antes.
+
+## 10. Skills invocáveis vivem todas em `.claude/skills/` (não em `docs/`)
+
+> **Atualiza a decisão 8** quanto à localização das skills.
+
+**Contexto:** a decisão 8 colocou as "skills" (procedimentos: adicionar modelo, fonte de
+dados, dependência, iniciar projeto) em `docs/skills/`, como documentação do molde. Mas o
+Claude Code só **descobre e invoca** Skills que estejam em `.claude/skills/<nome>/SKILL.md`
+(com frontmatter). Em `docs/`, elas eram só texto que a IA lia quando apontada — nunca
+capacidades invocáveis.
+
+**Decisão:** todas as skills invocáveis moram em **`.claude/skills/`**, no formato
+`<nome>/SKILL.md`. A pasta `docs/skills/` é **removida**. Isso inclui as skills do molde
+(que passam a vir versionadas em `.claude/skills/`) e as específicas do projeto. É uma
+**exceção técnica** à separação molde/projeto da decisão 8: skill invocável só funciona em
+`.claude/skills/`, então é lá que todas ficam, independentemente de serem "do molde".
+
+**Consequências:**
+- O Claude passa a **invocar** essas skills sozinho quando a situação bate com o
+  `description` (ex.: "quero adicionar um modelo" → dispara `adicionar-novo-modelo`), em
+  vez de depender de ser apontado para um `.md`.
+- `docs/` fica só com `context/`, `rules/`, `guides/` e o `GUIA-DO-ANALISTA.md`.
+- Há skills que **criam** artefatos no formato certo: `criar-skill` (novas skills) e
+  `criar-rule` (regras de projeto em `.claude/rules/`, ligadas via `@import` no `CLAUDE.md`).
+- Ressalva: uma skill nova só é descoberta ao iniciar uma **nova sessão** do Claude Code.

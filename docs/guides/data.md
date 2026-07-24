@@ -42,7 +42,7 @@ Implementações que já existem em [`pipeline/data/sources/`](../../pipeline/da
 
 ## Como eu adiciono uma nova fonte de dados
 
-Ver a skill [`adicionar-nova-fonte-de-dados.md`](../skills/adicionar-nova-fonte-de-dados.md)
+Ver a skill [`adicionar-nova-fonte-de-dados`](../../.claude/skills/adicionar-nova-fonte-de-dados/SKILL.md)
 para o passo a passo completo. Em resumo:
 
 1. Crie `pipeline/data/sources/<nome>_source.py` com uma classe que implemente `read`/`write`

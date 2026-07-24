@@ -1,4 +1,9 @@
-# Skill — Iniciar um projeto novo a partir do esqueleto
+---
+name: iniciar-projeto-novo-a-partir-do-esqueleto
+description: Use quando for uma cópia NOVA do esqueleto ainda não inicializada e a pessoa quer começar do zero. Conduz do zero ao primeiro pipeline rodando: copiar → tools/init.py → uv sync → editar config → rodar. É o primeiro passo a seguir numa cópia recém-obtida.
+---
+
+# Iniciar um projeto novo a partir do esqueleto
 
 Do zero a um projeto rodando: copiar o esqueleto, rodar `tools/init.py` uma vez e dar
 os primeiros passos. Distribuição por **cópia independente** (Decisão 0): não há
@@ -61,9 +66,9 @@ databricks bundle validate -t dev
 ## 5. Antes de mexer em qualquer coisa
 Leia `docs/rules/` (obrigatório) e o guia da camada que você vai tocar em
 `docs/guides/`. Para tarefas comuns, há skills irmãs:
-[`adicionar-novo-modelo.md`](adicionar-novo-modelo.md),
-[`adicionar-nova-fonte-de-dados.md`](adicionar-nova-fonte-de-dados.md),
-[`adicionar-dependencia.md`](adicionar-dependencia.md).
+[adicionar-novo-modelo](../adicionar-novo-modelo/SKILL.md),
+[adicionar-nova-fonte-de-dados](../adicionar-nova-fonte-de-dados/SKILL.md),
+[adicionar-dependencia](../adicionar-dependencia/SKILL.md).
 
 ## Validação
 Este fluxo foi exercido ponta a ponta nos dois toggles (Sim e Não): init → uv sync →

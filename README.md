@@ -35,7 +35,7 @@ entrada único, para IA ou pessoa, é o [`CLAUDE.md`](CLAUDE.md).
    uv sync
    ```
 4. Comece a trabalhar dentro da estrutura pronta. Passo a passo completo na skill
-   [`iniciar-projeto-novo-a-partir-do-esqueleto.md`](docs/skills/iniciar-projeto-novo-a-partir-do-esqueleto.md).
+   [`iniciar-projeto-novo-a-partir-do-esqueleto`](.claude/skills/iniciar-projeto-novo-a-partir-do-esqueleto/SKILL.md).
 
 ## Como rodar
 
@@ -63,8 +63,8 @@ Documentação do **molde** (em [`docs/`](docs/)):
 - Contexto e arquitetura: [`docs/context/`](docs/context/)
 - Rules (o que pode/não pode): [`docs/rules/`](docs/rules/)
 - Guias por etapa: [`docs/guides/`](docs/guides/)
-- Skills (procedimentos passo a passo): [`docs/skills/`](docs/skills/)
 - Decisões de arquitetura: [`docs/context/decisoes.md`](docs/context/decisoes.md)
+- Skills invocáveis (adicionar modelo, fonte, dependência, iniciar projeto…): [`.claude/skills/`](.claude/skills/)
 
 Contexto **deste projeto** (em [`.claude/`](.claude/), a preencher): problema de
 negócio, dados, glossário do domínio e decisões da cópia.

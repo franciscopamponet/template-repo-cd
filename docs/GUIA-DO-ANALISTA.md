@@ -4,7 +4,7 @@ Bem-vindo. Se você é analista de dados do núcleo e nunca viu este padrão, es
 documento certo. A meta é honesta e específica: você sair da cópia do repositório até o
 seu primeiro pipeline rodando **sem precisar perguntar nada a ninguém**. Ele é a versão
 *narrada* — o passo a passo enxuto, em forma de checklist, está na skill
-[`iniciar-projeto-novo-a-partir-do-esqueleto.md`](skills/iniciar-projeto-novo-a-partir-do-esqueleto.md).
+[`iniciar-projeto-novo-a-partir-do-esqueleto`](../.claude/skills/iniciar-projeto-novo-a-partir-do-esqueleto/SKILL.md).
 Aqui a gente explica o *porquê* de cada passo.
 
 > Nota sobre onde as coisas moram: o **manual do molde** (o padrão em si) fica em
@@ -218,12 +218,12 @@ aponta, gere/aponte um primeiro; o config de exemplo espera um Parquet em
 
 ### Precisa ir além do modelo inicial?
 
-Para as tarefas mais comuns, já existe um procedimento pronto em `docs/skills/` — não
-reinvente:
+Para as tarefas mais comuns já existe uma **skill** pronta — o Claude a invoca sozinho
+quando você descreve a tarefa (ou você abre o `SKILL.md`). Não reinvente:
 
-- **Adicionar um novo modelo** → [`adicionar-novo-modelo.md`](skills/adicionar-novo-modelo.md)
-- **Adicionar uma nova fonte de dados** (sem tocar no núcleo) → [`adicionar-nova-fonte-de-dados.md`](skills/adicionar-nova-fonte-de-dados.md)
-- **Adicionar uma dependência** (pyproject → lock → conda → CI) → [`adicionar-dependencia.md`](skills/adicionar-dependencia.md)
+- **Adicionar um novo modelo** → skill [`adicionar-novo-modelo`](../.claude/skills/adicionar-novo-modelo/SKILL.md)
+- **Adicionar uma nova fonte de dados** (sem tocar no núcleo) → skill [`adicionar-nova-fonte-de-dados`](../.claude/skills/adicionar-nova-fonte-de-dados/SKILL.md)
+- **Adicionar uma dependência** (pyproject → lock → conda → CI) → skill [`adicionar-dependencia`](../.claude/skills/adicionar-dependencia/SKILL.md)
 
 ---
 

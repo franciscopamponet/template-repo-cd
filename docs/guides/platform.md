@@ -43,7 +43,7 @@ A cancela `tools/check_manifest.py` refaz essa checagem no CI e **pula** quando
 
 - **Mudou dependência?** Nunca edite o `conda.yaml`. Edite o `pyproject.toml`, rode
   `gen_conda.py` e commite os dois juntos — ver a skill
-  [`adicionar-dependencia.md`](../skills/adicionar-dependencia.md).
+  [`adicionar-dependencia`](../../.claude/skills/adicionar-dependencia/SKILL.md).
 - **Deploy do bundle?** Preencha os `<PREENCHER: ...>` em `databricks.yml` e
   `resources/`, então:
   ```bash

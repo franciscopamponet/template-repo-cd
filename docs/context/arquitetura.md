@@ -14,11 +14,11 @@
 │   ├── context/              ← o que é o esqueleto, arquitetura, decisões, glossário
 │   ├── rules/                ← comportamento: o que se pode e não pode fazer (verificado no CI)
 │   ├── guides/               ← 1 guia por etapa: config, data, models, common, entrypoints, platform
-│   ├── skills/               ← procedimentos reutilizáveis (.md)
 │   └── GUIA-DO-ANALISTA.md   ← onboarding narrado, da cópia ao primeiro pipeline
 ├── .claude/                  ← CONTEXTO DESTE PROJETO — preenchido ao longo do tempo (pasta oculta)
 │   ├── context/              ← projeto, arquitetura, decisões e glossário DA CÓPIA (a preencher)
-│   └── rules/ guides/ skills/← espaço para acréscimos específicos do projeto
+│   ├── skills/               ← Skills invocáveis: molde (adicionar modelo…) + do projeto (decisão 10)
+│   └── rules/ guides/        ← espaço para acréscimos específicos do projeto
 ├── tools/
 │   └── init.py               ← roda 1x após copiar: pergunta o toggle, poda platform/, nomeia o projeto
 ├── tests/                    ← testes do molde

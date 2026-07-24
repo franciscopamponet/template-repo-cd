@@ -1,4 +1,9 @@
-# Skill — Adicionar um novo modelo
+---
+name: adicionar-novo-modelo
+description: Use quando o usuário quer criar um NOVO modelo em pipeline/models/<nome>/, respeitando a anatomia de 5 arquivos (Rule 00) e o config de mesmo nome (Rule 05).
+---
+
+# Adicionar um novo modelo
 
 Procedimento para criar `pipeline/models/<novo>/` respeitando a anatomia de 5 arquivos
 (Rule 00) e a disciplina de nomes (Rule 05). Referência viva: `pipeline/models/exemplo_modelo/`.

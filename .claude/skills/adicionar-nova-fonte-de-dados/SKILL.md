@@ -1,4 +1,9 @@
-# Skill — Adicionar uma nova fonte de dados
+---
+name: adicionar-nova-fonte-de-dados
+description: Use quando o usuário quer adicionar uma NOVA FONTE DE DADOS (um DataSource — ler/escrever de um novo formato ou origem, ex.: Excel, API, outro banco) sem tocar no núcleo do pipeline.
+---
+
+# Adicionar uma nova fonte de dados
 
 Como implementar um novo `DataSource` sem tocar no núcleo (Decisão 3 / Rule 06).
 Referência viva: `pipeline/data/sources/parquet_source.py` (a mais simples).
@@ -53,7 +58,7 @@ implementação está por trás.
 
 5. **Se precisar de uma dependência nova**, adicione-a como extra opcional no
    `pyproject.toml` (não no núcleo, para não pesar quem não usa a fonte) e siga a skill
-   [`adicionar-dependencia.md`](adicionar-dependencia.md).
+   [adicionar-dependencia](../adicionar-dependencia/SKILL.md).
 
 6. **Use pelo config**, sem tocar em `prepare_data` nem no `orchestrator`:
    ```yaml

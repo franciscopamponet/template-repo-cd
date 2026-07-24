@@ -73,7 +73,6 @@ Arquivo solto (`.claude/skills/algo.md`) ou sem frontmatter **não** conta como 
 - [ ] Avisei sobre reiniciar a sessão para a skill ser descoberta.
 
 ## Observação
-Skills do Claude Code SÓ funcionam em `.claude/skills/`. Por isso elas vivem aqui, e não
-em `docs/skills/` (onde ficam os procedimentos-**documentação** do molde). São coisas
-diferentes: `docs/skills/` = texto que se lê; `.claude/skills/` = capacidade que o Claude
-invoca.
+Skills do Claude Code SÓ funcionam em `.claude/skills/` — é o único lugar que o Claude
+descobre e invoca. Por isso **todas** as skills do repo vivem aqui (as do molde e as do
+projeto), no formato `<nome>/SKILL.md`. Não há mais skills em `docs/` (ver decisão 10).
