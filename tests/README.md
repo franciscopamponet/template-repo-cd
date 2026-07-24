@@ -20,8 +20,12 @@ problema no projeto de verdade.
 uv run pytest            # só os testes
 python3 tools/check.py   # os testes + ruff + as 4 cancelas (o mesmo conjunto do CI)
 ```
-Rode antes de commitar. O **CI** roda tudo isso sozinho a cada push no GitHub: se algo
-quebrou, ele barra o merge.
+
+**Quando rodar:** não é um ritual de "toda sessão". Você roda quando **mexeu no código
+e vai commitar** — não ao abrir o projeto nem só para ler/explorar. E mesmo assim não é
+obrigatório: o **CI** roda tudo isso sozinho a cada push no GitHub e barra o merge se
+algo quebrou. Rodar local é só para pegar o erro **mais cedo**, em segundos, em vez de
+esperar o CI falhar depois do push.
 
 ## O que tem aqui
 - `conftest.py` — dado sintético + config de teste, reaproveitados pelos outros.
